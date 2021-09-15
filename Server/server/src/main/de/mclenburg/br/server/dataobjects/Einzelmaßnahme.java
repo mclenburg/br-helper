@@ -1,8 +1,8 @@
-package java.de.mclenburg.br.server.dataobjects;
+package de.mclenburg.br.server.dataobjects;
 
+import de.mclenburg.br.server.catalogues.Maßnahmeart;
 import lombok.Data;
 
-import java.de.mclenburg.br.server.catalogues.Maßnahmeart;
 import java.time.LocalDate;
 import java.util.List;
 

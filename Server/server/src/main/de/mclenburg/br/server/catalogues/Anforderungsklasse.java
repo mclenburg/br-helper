@@ -1,4 +1,4 @@
-package java.de.mclenburg.br.server.catalogues;
+package de.mclenburg.br.server.catalogues;
 
 import lombok.Data;
 

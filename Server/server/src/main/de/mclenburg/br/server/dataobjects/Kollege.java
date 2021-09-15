@@ -1,4 +1,4 @@
-package java.de.mclenburg.br.server.dataobjects;
+package de.mclenburg.br.server.dataobjects;
 
 import lombok.Data;
 
