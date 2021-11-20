@@ -1,32 +1,31 @@
-package de.mclenburg.br.server.dataobjects;
+package de.mclenburg.br.server.catalogues;
 
-import de.mclenburg.br.server.catalogues.Anforderungsklasse;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@AllArgsConstructor
 @Entity
-public class Stelle {
+public class Massnahmeart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String bezeichnung;
-    @OneToOne(targetEntity = Anforderungsklasse.class)
-    private Anforderungsklasse anforderungsklasse;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Stelle stelle = (Stelle) o;
-        return id != null && Objects.equals(id, stelle.id);
+        Massnahmeart that = (Massnahmeart) o;
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
