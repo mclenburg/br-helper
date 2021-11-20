@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/br-helper.iml" filepath="$PROJECT_DIR$/.idea/br-helper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Frontend-Web/Frontend-Web.iml" filepath="$PROJECT_DIR$/Frontend-Web/Frontend-Web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/brhelper.iml" filepath="$PROJECT_DIR$/brhelper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Server/server.iml" filepath="$PROJECT_DIR$/Server/server.iml" />
     </modules>
   </component>
 </project>

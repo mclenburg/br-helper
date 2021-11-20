@@ -12,7 +12,7 @@
 	<artifactId>server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>server</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Server-Part for Helper</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -51,6 +51,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -66,6 +72,18 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>3.0.0-M5</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
