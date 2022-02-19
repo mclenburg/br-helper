@@ -5,12 +5,12 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 
-class EinzelmassnahmeTest {
+public class EinzelmassnahmeTest {
 
     @Test
     public void shouldCreateObject() {
        Einzelmassnahme einzelmassnahme = new Einzelmassnahme(-1L, LocalDate.now(), null, "Test");
        Assert.assertEquals("Id should be -1", Long.valueOf(-1L), einzelmassnahme.getId());
-       Assert.assertEquals("Inhalt should ne Test", "Test", einzelmassnahme.getInhalt());
+       Assert.assertEquals("Inhalt should be Test", "Test", einzelmassnahme.getInhalt());
     }
 }
