@@ -1,6 +1,6 @@
-package de.mclenburg.br.server.dataobjects;
+package de.mclenburg.br.server.jpa.dataobjects;
 
-import de.mclenburg.br.server.catalogues.Anforderungsklasse;
+import de.mclenburg.br.server.jpa.catalogues.Anforderungsklasse;
 import lombok.*;
 import org.hibernate.Hibernate;
 

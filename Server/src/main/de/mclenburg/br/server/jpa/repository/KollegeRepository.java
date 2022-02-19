@@ -1,6 +1,6 @@
-package de.mclenburg.br.server.repository;
+package de.mclenburg.br.server.jpa.repository;
 
-import de.mclenburg.br.server.dataobjects.Kollege;
+import de.mclenburg.br.server.jpa.dataobjects.Kollege;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 

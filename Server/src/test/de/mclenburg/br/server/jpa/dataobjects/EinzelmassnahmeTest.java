@@ -1,4 +1,4 @@
-package de.mclenburg.br.server.dataobjects;
+package de.mclenburg.br.server.jpa.dataobjects;
 
 import org.junit.Assert;
 import org.junit.Test;

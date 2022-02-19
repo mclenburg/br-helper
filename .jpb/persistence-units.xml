@@ -4,7 +4,7 @@
     <persistence-units>
       <persistence-unit name="Catalog">
         <packages>
-          <package value="de.mclenburg.br.server.catalogues" />
+          <package value="de.mclenburg.br.server.jpa.catalogues" />
         </packages>
       </persistence-unit>
     </persistence-units>

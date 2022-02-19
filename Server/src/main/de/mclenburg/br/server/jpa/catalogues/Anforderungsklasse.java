@@ -1,4 +1,4 @@
-package de.mclenburg.br.server.catalogues;
+package de.mclenburg.br.server.jpa.catalogues;
 
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -14,17 +14,18 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-public class Massnahmeart {
+public class Anforderungsklasse {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String bezeichnung;
+    private Long einstufung;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Massnahmeart that = (Massnahmeart) o;
+        Anforderungsklasse that = (Anforderungsklasse) o;
         return id != null && Objects.equals(id, that.id);
     }
 

@@ -1,9 +1,11 @@
-package de.mclenburg.br.server.dataobjects;
+package de.mclenburg.br.server.jpa.dataobjects;
 
+import de.mclenburg.br.server.jpa.catalogues.Massnahmeart;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,21 +15,21 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Kollege {
+public class Einzelmassnahme {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private String nachname;
-    @ManyToOne(targetEntity = Einzelmassnahme.class)
-    private List<Einzelmassnahme> einzelmassnahmen;
+    private LocalDate datum;
+    @ManyToOne(targetEntity = Massnahmeart.class)
+    private List<Massnahmeart> massnahmearten;
+    private String inhalt;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Kollege kollege = (Kollege) o;
-        return id != null && Objects.equals(id, kollege.id);
+        Einzelmassnahme that = (Einzelmassnahme) o;
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
