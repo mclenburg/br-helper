@@ -1,12 +1,14 @@
 package de.mclenburg.br.server.jpa.catalogues;
 
-import lombok.*;
+import de.mclenburg.br.server.jpa.dataobjects.Einzelmassnahme;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -19,6 +21,9 @@ public class Massnahmeart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String bezeichnung;
+    @ManyToMany
+    @JoinTable(name = "einzelm_massnart")
+    private List<Einzelmassnahme> einzelmassnahmen;
 
     @Override
     public boolean equals(Object o) {

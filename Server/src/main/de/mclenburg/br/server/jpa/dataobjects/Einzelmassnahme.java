@@ -20,9 +20,12 @@ public class Einzelmassnahme {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private LocalDate datum;
-    @ManyToOne(targetEntity = Massnahmeart.class)
+    @ManyToMany
+    @JoinTable(name = "einzelm_massnart")
     private List<Massnahmeart> massnahmearten;
     private String inhalt;
+    @ManyToOne
+    private Kollege kollege;
 
     @Override
     public boolean equals(Object o) {

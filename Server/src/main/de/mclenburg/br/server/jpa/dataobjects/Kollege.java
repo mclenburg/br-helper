@@ -19,7 +19,8 @@ public class Kollege {
     private Long id;
     private String name;
     private String nachname;
-    @ManyToOne(targetEntity = Einzelmassnahme.class)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
     private List<Einzelmassnahme> einzelmassnahmen;
 
     @Override

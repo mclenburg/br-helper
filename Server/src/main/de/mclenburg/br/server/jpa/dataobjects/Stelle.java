@@ -18,7 +18,7 @@ public class Stelle {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String bezeichnung;
-    @OneToOne(targetEntity = Anforderungsklasse.class)
+    @OneToOne
     private Anforderungsklasse anforderungsklasse;
 
     @Override
