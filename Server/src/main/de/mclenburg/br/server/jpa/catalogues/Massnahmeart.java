@@ -21,8 +21,6 @@ public class Massnahmeart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String bezeichnung;
-    @ManyToMany(mappedBy = "massnahmearten")
-    private List<Einzelmassnahme> einzelmassnahmen;
 
     @Override
     public boolean equals(Object o) {
