@@ -7,6 +7,7 @@ import de.mclenburg.br.server.rest.api.Kollege;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.expression.AccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
@@ -50,6 +51,11 @@ public class KollegeRestController {
         kollegeRepository.save(mapToJpa(kollege));
         return new BrResponse<>(mapToApi(kollegeRepository.findByNameEqualsIgnoreCaseAndNachnameEqualsIgnoreCaseOrderByNameAscNachnameAsc(kollege.getVorname(), kollege.getNachname()))
                 .stream().findFirst().orElse(null), null);
+    }
+
+    @GetMapping(path = Kollege.ENDPOINT)
+    public void getWithoutParam() throws AccessException {
+        throw new AccessException("not allowed");
     }
 
     private List<Kollege> mapToApi(List<de.mclenburg.br.server.jpa.dataobjects.Kollege> kollegen) {
