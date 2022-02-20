@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Role;
 import org.springframework.expression.AccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -28,18 +29,32 @@ public class BenutzerRestController {
         return new BrResponse<>(mapToApi(benutzerRepository.findByUsername(username)), null);
     }
 
-    @PostMapping(path = Benutzer.ENDPOINT)
+    @PutMapping(path = Benutzer.ENDPOINT)
     @RolesAllowed(value = {"ROLE_ADMIN"})
-    public BrResponse<Benutzer> addKollege(@RequestBody Benutzer benutzer) {
+    public BrResponse<Benutzer> addBenutzer(@RequestBody Benutzer benutzer) {
         if(benutzer.getNachname() == null) return null;
         if(benutzer.getVorname() == null) return null;
         benutzerRepository.save(mapToJpa(benutzer));
         return new BrResponse<>(mapToApi(benutzerRepository.findByUsername(benutzer.getBenutzername())), null);
     }
 
+    @PostMapping(path = Benutzer.ENDPOINT)
+    public BrResponse<Benutzer> updatePasswd(@RequestBody Benutzer benutzer) {
+        if(benutzer.getNachname() == null) return null;
+        if(benutzer.getVorname() == null) return null;
+        de.mclenburg.br.server.jpa.dataobjects.Benutzer nutzer = benutzerRepository.findByUsername(benutzer.getBenutzername());
+        if(nutzer == null) {
+            return new BrResponse<>(null, new BrError(HttpStatus.NOT_FOUND.value(), "kein solcher Benutzer vorhanden"));
+        }
+        nutzer.setPasswort(de.mclenburg.br.server.jpa.dataobjects.Benutzer.encryptString(benutzer.getPasswort()));
+        benutzerRepository.save(nutzer);
+        benutzerRepository.flush();
+        return new BrResponse<>(mapToApi(benutzerRepository.findByUsername(benutzer.getBenutzername())), null);
+    }
+
     @GetMapping(path = Benutzer.ENDPOINT)
-    public void getWithoutParam() throws AccessException {
-        throw new AccessException("not allowed");
+    public BrResponse<String> getWithoutParam() {
+        return new BrResponse<>(null, new BrError(HttpStatus.FORBIDDEN.value(), "not allowed"));
     }
 
     private Benutzer mapToApi(de.mclenburg.br.server.jpa.dataobjects.Benutzer benutzer) {

@@ -1,6 +1,7 @@
 package de.mclenburg.br.server.rest;
 
 import de.mclenburg.br.server.jpa.repository.KollegeRepository;
+import de.mclenburg.br.server.rest.api.BrError;
 import de.mclenburg.br.server.rest.api.BrResponse;
 import de.mclenburg.br.server.rest.api.Einzelmassnahme;
 import de.mclenburg.br.server.rest.api.Kollege;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.expression.AccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
@@ -44,18 +46,19 @@ public class KollegeRestController {
         return new BrResponse<>(mapToApi(kollegeRepository.findByNameEqualsIgnoreCaseAndNachnameEqualsIgnoreCaseOrderByNameAscNachnameAsc(vorname, name)), null);
     }
 
-    @PostMapping(path = Kollege.ENDPOINT)
+    @PutMapping(path = Kollege.ENDPOINT)
     public BrResponse<Kollege> addKollege(@RequestBody Kollege kollege) {
         if(kollege.getNachname() == null) return null;
         if(kollege.getVorname() == null) return null;
         kollegeRepository.save(mapToJpa(kollege));
+        kollegeRepository.flush();
         return new BrResponse<>(mapToApi(kollegeRepository.findByNameEqualsIgnoreCaseAndNachnameEqualsIgnoreCaseOrderByNameAscNachnameAsc(kollege.getVorname(), kollege.getNachname()))
                 .stream().findFirst().orElse(null), null);
     }
 
     @GetMapping(path = Kollege.ENDPOINT)
-    public void getWithoutParam() throws AccessException {
-        throw new AccessException("not allowed");
+    public BrResponse<String> getWithoutParam() {
+        return new BrResponse<>(null, new BrError(HttpStatus.FORBIDDEN.value(), "not allowed"));
     }
 
     private List<Kollege> mapToApi(List<de.mclenburg.br.server.jpa.dataobjects.Kollege> kollegen) {
