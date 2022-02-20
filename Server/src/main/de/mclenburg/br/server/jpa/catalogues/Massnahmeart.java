@@ -21,8 +21,7 @@ public class Massnahmeart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String bezeichnung;
-    @ManyToMany
-    @JoinTable(name = "einzelm_massnart")
+    @ManyToMany(mappedBy = "massnahmearten")
     private List<Einzelmassnahme> einzelmassnahmen;
 
     @Override

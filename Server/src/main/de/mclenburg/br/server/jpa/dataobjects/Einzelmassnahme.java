@@ -21,7 +21,6 @@ public class Einzelmassnahme {
     private Long id;
     private LocalDate datum;
     @ManyToMany
-    @JoinTable(name = "einzelm_massnart")
     private List<Massnahmeart> massnahmearten;
     private String inhalt;
     @ManyToOne
