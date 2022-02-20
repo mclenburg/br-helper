@@ -1,6 +1,7 @@
 package de.mclenburg.br.server.rest;
 
 import de.mclenburg.br.server.jpa.repository.KollegeRepository;
+import de.mclenburg.br.server.rest.api.BrResponse;
 import de.mclenburg.br.server.rest.api.Einzelmassnahme;
 import de.mclenburg.br.server.rest.api.Kollege;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,28 @@ public class KollegeRestController {
      * @return Liste mit gefundenen Personen
      */
     @GetMapping(path = Kollege.ENDPOINT+"/{name}")
-    public List<Kollege> findByName(@PathVariable String name) {
-        return mapToApi(kollegeRepository.findByNachnameEqualsIgnoreCase(name));
+    public BrResponse<List<Kollege>> findByName(@PathVariable String name) {
+        return new BrResponse<>(mapToApi(kollegeRepository.findByNachnameEqualsIgnoreCase(name)), null);
+    }
+
+    /**
+     * sucht in der Datenbank nach allen Personen mit angegebenem Nachnamen
+     * @param name  Nachname des zu suchenden Kollegen
+     * @param vorname Vorname des zu suchenden Kollegen
+     * @return Liste mit gefundenen Personen
+     */
+    @GetMapping(path = Kollege.ENDPOINT+"/{name}/{vorname}")
+    public BrResponse<List<Kollege>> findByName(@PathVariable String name, @PathVariable String vorname) {
+        return new BrResponse<>(mapToApi(kollegeRepository.findByNameEqualsIgnoreCaseAndNachnameEqualsIgnoreCaseOrderByNameAscNachnameAsc(vorname, name)), null);
+    }
+
+    @PostMapping(path = Kollege.ENDPOINT)
+    public BrResponse<Kollege> addKollege(@RequestBody Kollege kollege) {
+        if(kollege.getNachname() == null) return null;
+        if(kollege.getVorname() == null) return null;
+        kollegeRepository.save(mapToJpa(kollege));
+        return new BrResponse<>(mapToApi(kollegeRepository.findByNameEqualsIgnoreCaseAndNachnameEqualsIgnoreCaseOrderByNameAscNachnameAsc(kollege.getVorname(), kollege.getNachname()))
+                .stream().findFirst().orElse(null), null);
     }
 
     private List<Kollege> mapToApi(List<de.mclenburg.br.server.jpa.dataobjects.Kollege> kollegen) {
@@ -49,26 +70,6 @@ public class KollegeRestController {
             kollegeList.add(apiKollege);
         });
         return kollegeList;
-    }
-
-    /**
-     * sucht in der Datenbank nach allen Personen mit angegebenem Nachnamen
-     * @param name  Nachname des zu suchenden Kollegen
-     * @param vorname Vorname des zu suchenden Kollegen
-     * @return Liste mit gefundenen Personen
-     */
-    @GetMapping(path = Kollege.ENDPOINT+"/{name}/{vorname}")
-    public List<Kollege> findByName(@PathVariable String name, @PathVariable String vorname) {
-        return mapToApi(kollegeRepository.findByNameEqualsIgnoreCaseAndNachnameEqualsIgnoreCaseOrderByNameAscNachnameAsc(vorname, name));
-    }
-
-    @PostMapping(path = Kollege.ENDPOINT)
-    public Kollege addKollege(@RequestBody Kollege kollege) {
-        if(kollege.getNachname() == null) return null;
-        if(kollege.getVorname() == null) return null;
-        kollegeRepository.save(mapToJpa(kollege));
-        return mapToApi(kollegeRepository.findByNameEqualsIgnoreCaseAndNachnameEqualsIgnoreCaseOrderByNameAscNachnameAsc(kollege.getVorname(), kollege.getNachname()))
-                .stream().findFirst().orElse(null);
     }
 
     private de.mclenburg.br.server.jpa.dataobjects.Kollege mapToJpa(Kollege kollege) {
