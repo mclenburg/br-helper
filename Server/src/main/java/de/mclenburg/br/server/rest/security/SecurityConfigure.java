@@ -20,15 +20,15 @@ public class SecurityConfigure  extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth    .userDetailsService(userDetailsService)
-                .passwordEncoder(encoder());
+        auth
+                .authenticationProvider(authProvider());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/actuator").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -42,4 +42,11 @@ public class SecurityConfigure  extends WebSecurityConfigurerAdapter {
         return new BrPasswordEncoder();
     }
 
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(encoder());
+        return authProvider;
+    }
 }
