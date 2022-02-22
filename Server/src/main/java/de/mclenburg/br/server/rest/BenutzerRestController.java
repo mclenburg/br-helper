@@ -49,7 +49,11 @@ public class BenutzerRestController {
         if(benutzer.getVorname() == null) return new BrResponse(null, new BrError(HttpStatus.EXPECTATION_FAILED.value(), "Vorname darf nicht leer sein"));
         if(benutzerRepository.findAll().size() > 0) return new BrResponse(null, new BrError(HttpStatus.FORBIDDEN.value(), "Nutzer bereits angelegt"));
         de.mclenburg.br.server.jpa.dataobjects.Benutzer admin = mapToJpa(benutzer);
-        de.mclenburg.br.server.jpa.catalogues.Rolle adminRole = rolleRepository.findByBezeichnung("ROLE_ADMIN");
+        de.mclenburg.br.server.jpa.catalogues.Rolle adminRole = new de.mclenburg.br.server.jpa.catalogues.Rolle();
+        adminRole.setBezeichnung("ROLE_ADMIN");
+        rolleRepository.save(adminRole);
+        rolleRepository.flush();
+        adminRole = rolleRepository.findByBezeichnung("ROLE_ADMIN");
         admin.setRollen(List.of(new de.mclenburg.br.server.jpa.catalogues.Rolle[]{adminRole}));
         benutzerRepository.save(mapToJpa(benutzer));
         return new BrResponse<>(mapToApi(benutzerRepository.findByUsername(benutzer.getBenutzername())), null);
