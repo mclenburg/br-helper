@@ -2,6 +2,7 @@ package de.mclenburg.br.server.rest;
 
 import de.mclenburg.br.server.jpa.repository.BenutzerRepository;
 import de.mclenburg.br.server.jpa.repository.KollegeRepository;
+import de.mclenburg.br.server.jpa.repository.RolleRepository;
 import de.mclenburg.br.server.rest.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -20,6 +22,9 @@ public class BenutzerRestController {
 
     @Autowired
     private BenutzerRepository benutzerRepository;
+
+    @Autowired
+    private RolleRepository rolleRepository;
 
     @Value("${server.port}")
     private int serverPort;
@@ -32,8 +37,20 @@ public class BenutzerRestController {
     @PutMapping(path = Benutzer.ENDPOINT)
     @RolesAllowed(value = {"ROLE_ADMIN"})
     public BrResponse<Benutzer> addBenutzer(@RequestBody Benutzer benutzer) {
-        if(benutzer.getNachname() == null) return null;
-        if(benutzer.getVorname() == null) return null;
+        if(benutzer.getNachname() == null) return new BrResponse(null, new BrError(HttpStatus.EXPECTATION_FAILED.value(), "Nachname darf nicht leer sein"));
+        if(benutzer.getVorname() == null) return new BrResponse(null, new BrError(HttpStatus.EXPECTATION_FAILED.value(), "Vorname darf nicht leer sein"));
+        benutzerRepository.save(mapToJpa(benutzer));
+        return new BrResponse<>(mapToApi(benutzerRepository.findByUsername(benutzer.getBenutzername())), null);
+    }
+
+    @PutMapping(path = Benutzer.ENDPOINT+"/setup")
+    public BrResponse<Benutzer> addFirstAdminBenutzer(@RequestBody Benutzer benutzer) {
+        if(benutzer.getNachname() == null) return new BrResponse(null, new BrError(HttpStatus.EXPECTATION_FAILED.value(), "Nachname darf nicht leer sein"));
+        if(benutzer.getVorname() == null) return new BrResponse(null, new BrError(HttpStatus.EXPECTATION_FAILED.value(), "Vorname darf nicht leer sein"));
+        if(benutzerRepository.findAll().size() > 0) return new BrResponse(null, new BrError(HttpStatus.FORBIDDEN.value(), "Nutzer bereits angelegt"));
+        de.mclenburg.br.server.jpa.dataobjects.Benutzer admin = mapToJpa(benutzer);
+        de.mclenburg.br.server.jpa.catalogues.Rolle adminRole = rolleRepository.findByBezeichnung("ROLE_ADMIN");
+        admin.setRollen(List.of(new de.mclenburg.br.server.jpa.catalogues.Rolle[]{adminRole}));
         benutzerRepository.save(mapToJpa(benutzer));
         return new BrResponse<>(mapToApi(benutzerRepository.findByUsername(benutzer.getBenutzername())), null);
     }

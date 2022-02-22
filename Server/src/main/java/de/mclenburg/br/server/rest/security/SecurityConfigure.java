@@ -1,5 +1,6 @@
 package de.mclenburg.br.server.rest.security;
 
+import de.mclenburg.br.server.rest.api.Benutzer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +29,7 @@ public class SecurityConfigure  extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/actuator").permitAll()
+                .antMatchers("/actuator", Benutzer.ENDPOINT+"/setup").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
